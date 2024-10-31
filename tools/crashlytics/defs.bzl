@@ -2,7 +2,7 @@ def crashlytics_android_library(name, package_name, build_id, resource_files):
   _CRASHLYTICS_PROP_TEMPLATE = \
   """build_id={build_id}
 package_name={package_name}"""
-  crashlytics_properties_file = "_%s_crashlytics/crashlytics-build.properties" % name
+  crashlytics_properties_file = "_%s_crashlytics/assets/crashlytics-build.properties" % name
   crashlytics_properties_file_content = _CRASHLYTICS_PROP_TEMPLATE.format(
       build_id = build_id,
       package_name = package_name,
@@ -20,7 +20,7 @@ package_name={package_name}"""
   _CRASHLYTICS_RES_TEMPLATE = \
   """<?xml version=\\"1.0\\" encoding=\\"utf-8\\" standalone=\\"no\\"?>
 <resources xmlns:tools=\\"http://schemas.android.com/tools\\">
-    <string tools:ignore=\\"UnusedResources,TypographyDashes\\" name=\\"com.crashlytics.android.build_id\\" translatable=\\"false\\">{build_id}</string>
+    <string tools:ignore=\\"UnusedResources,TypographyDashes\\" name=\\"com.google.firebase.crashlytics.mapping_file_id\\" translatable=\\"false\\">{build_id}</string>
 </resources>"""
   crashlytics_res_values_file = "_%s_crashlytics/res/values/com_crashlytics_build_id.xml" % name
   crashlytics_res_values_file_content = _CRASHLYTICS_RES_TEMPLATE.format(build_id = build_id)
@@ -35,7 +35,7 @@ package_name={package_name}"""
   _CRASHLYTICS_KEEP_CONTENT = \
   """<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>
 <resources xmlns:tools=\\"http://schemas.android.com/tools\\"
-    tools:keep=\\"@string/com_crashlytics_android_build_id\\" />"""
+    tools:keep=\\"@string/com_google_firebase_crashlytics_mapping_file_id\\" />"""
   crashlytics_res_keep_file = "_%s_crashlytics/res/raw/%s.keep.xml" % (name, package_name)
 
   native.genrule(
@@ -64,7 +64,7 @@ package_name={package_name}"""
   native.android_library(
       name = name,
       assets = [crashlytics_properties_file],
-      assets_dir = "_%s_crashlytics" % name,
+      assets_dir = "_%s_crashlytics/assets" % name,
       custom_package = package_name,
       manifest = crashlytics_manifest_file,
       resource_files = [crashlytics_res_values_file, crashlytics_res_keep_file] + resource_files,
